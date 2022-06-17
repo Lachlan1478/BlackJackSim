@@ -1,0 +1,8 @@
+Inititially assume infinite a number of decks
+
+Create object class for player which takes input as two cards as well as the dealers code
+
+Create data set using results from basic strategy simulations
+
+Use number of aces as well as sum of all cards previously as features and the best action as target. Potentially the results of the game as well.
+
