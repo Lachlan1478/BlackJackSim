@@ -1,20 +1,21 @@
 import random
 
 
+
 def drawCard():
     cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
     index = random.randint(0, 12)
     card = cards[index]
     return card
 
-class Player():
+class Actions():
     def hit(self):
         newCard = drawCard()
         self.sum += newCard
-
     def split(self):
         pass
     def double(self):
+        lastCard = drawCard()
         pass
     def stand(self):
         pass
@@ -32,46 +33,40 @@ class Player():
         self.dealerscard = dealersCard
         self.sum = card1 + card2
 
-        while(self.sum < 11):
-            self.hit()
-
-        print(self.sum)
-
-        self.stand()
-
 
 class Game():
-    def getResult(self):
-        # Standoff
-        print(self.dealersHand)
-        if (self.PlayerHand == 0):
-            self.result = -1
-            return self.result
-        if (self.dealersHand == 22):
-            self.result = 0
-
-        else:
-            if (self.dealersHand > self.PlayerHand):
-                self.result = -1
-            elif (self.dealersHand == self.PlayerHand):
-                self.result = 0
-            else:
-                self.result = 1
-        return self.result
-
     def __init__(self):
         ## Deal cards
         # Dealers Card
         self.dealersCard = drawCard()
-        self.Player = Player(drawCard(), drawCard(), self.dealersCard)
-        self.PlayerHand = self.Player.HandValue()
+        self.card1 = drawCard()
+        self.card2 = drawCard()
 
-        self.dealersHand = self.dealersCard
-        while(self.dealersHand < 17):
-            self.dealersHand += drawCard()
+        #Get action
+
+        while(self.dealersCard < 17):
+            self.dealersCard += drawCard()
 
         #-1 if split or double loss, -1 if loss, 0 if draw, 1 if won and 2 if double or split win
         self.result =  0
+
+        def getResult(self):
+            # Standoff
+            print(self.dealersHand)
+            if (self.PlayerHand == 0):
+                self.result = -1
+                return self.result
+            if (self.dealersHand == 22):
+                self.result = 0
+
+            else:
+                if (self.dealersHand > self.PlayerHand):
+                    self.result = -1
+                elif (self.dealersHand == self.PlayerHand):
+                    self.result = 0
+                else:
+                    self.result = 1
+            return self.result
 
 
 
