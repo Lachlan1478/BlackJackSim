@@ -1,72 +1,98 @@
 import random
+from BasicStrategy import Action
 
 
-
-def drawCard():
+def drawCard(dealer = False):
     cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
     index = random.randint(0, 12)
     card = cards[index]
+    if(card == 1 and dealer):
+        card = 11
     return card
 
 class Actions():
-    def hit(self):
-        newCard = drawCard()
-        self.sum += newCard
-    def split(self):
-        pass
-    def double(self):
-        lastCard = drawCard()
-        pass
+
     def stand(self):
         pass
-    def HandValue(self):
-        if(self.sum > 21):
-            return 0
-        else:
-            return self.sum
     def Blackjack(self):
         pass
 
-    def __init__(self, card1, card2, dealersCard):
-        self.card1 = card1
-        self.card2 = card2
-        self.dealerscard = dealersCard
-        self.sum = card1 + card2
-
 
 class Game():
+
+    def hit(self, sum):
+        action = "H"
+        while(action != "S"):
+            sum += drawCard()
+            if(sum > 21):
+                break
+            else:
+                action = Action(sum, 0, self.dealersCard[0], False)
+        return sum
+
+    def split(self):
+
+        pass
+
+    def double(self):
+        lastCard = drawCard()
+        return lastCard+self.hand[0]+self.hand[1]
+
+    def getResult(self, PlayerHand, dealersHand):
+        # Standoff
+        if (PlayerHand > 21):
+            self.result = -1
+        elif (dealersHand == 22):
+            self.result = 0
+        elif(dealersHand > 22):
+            self.result = 1
+
+        else:
+            if (dealersHand > PlayerHand):
+                self.result = -1
+            elif (dealersHand == PlayerHand):
+                self.result = 0
+            else:
+                self.result = 1
+        return self.result
+
     def __init__(self):
         ## Deal cards
         # Dealers Card
-        self.dealersCard = drawCard()
-        self.card1 = drawCard()
-        self.card2 = drawCard()
+        self.dealersCard = [drawCard(True)]
+        while (sum(self.dealersCard) < 17):
+            self.dealersCard.append(drawCard(True))
+            if(sum(self.dealersCard)>22 and 11 in self.dealersCard):
+                self.dealersCard.remove(11)
+                self.dealersCard.append(1)
+
+        self.hand = [drawCard(), drawCard()]
+        self.hand2 = []
+
+        self.sum = 0
+        self.sum2 = 0
+        self.result = 0
+
 
         #Get action
 
-        while(self.dealersCard < 17):
-            self.dealersCard += drawCard()
+        self.move = Action(self.hand[0], self.hand[1], self.dealersCard[0])
 
-        #-1 if split or double loss, -1 if loss, 0 if draw, 1 if won and 2 if double or split win
-        self.result =  0
-
-        def getResult(self):
-            # Standoff
-            print(self.dealersHand)
-            if (self.PlayerHand == 0):
-                self.result = -1
-                return self.result
-            if (self.dealersHand == 22):
-                self.result = 0
-
+        if(self.move == "SP"):
+            self.split()
+        else:
+            if(self.move == "H"):
+                self.sum = self.hit(self.hand[0]+self.hand[1])
+                self.getResult(self.sum, sum(self.dealersCard))
+            elif(self.move == "D"):
+                self.sum = self.double()
+                self.getResult(self.sum, sum(self.dealersCard))
+                self.result = self.result*2
             else:
-                if (self.dealersHand > self.PlayerHand):
-                    self.result = -1
-                elif (self.dealersHand == self.PlayerHand):
-                    self.result = 0
-                else:
-                    self.result = 1
-            return self.result
+                self.sum = self.hand[0]+self.hand[1]
+                self.getResult(self.sum, sum(self.dealersCard))
 
-
+    def returnResult(self):
+        print("Hand: ", self.sum, "Dealer: ", sum(self.dealersCard))
+        return self.result
 

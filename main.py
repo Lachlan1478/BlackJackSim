@@ -1,22 +1,15 @@
 from BlackJackEngine import Game
-import pandas as pd
-from BasicStrategy import Action
-
-
-
-
-
 
 def main():
-    profit = 0
-    bet = 10
+    result = 0
+    iterations = 10000
 
-    print(Action(5, 3, 1))
+    for i in range(0, iterations):
+        Sim = Game()
+        result = result + Sim.returnResult()
 
-    #Sim = Game()
-    #Result = Sim.getResult()
-    #print(Result)
-
+    print(result)
+    print(result/iterations)
 
 if __name__ == '__main__':
     main()
