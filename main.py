@@ -2,7 +2,7 @@ from BlackJackEngine import Game
 
 def main():
     result = 0
-    iterations = 10000
+    iterations = 100
 
     for i in range(0, iterations):
         Sim = Game()
