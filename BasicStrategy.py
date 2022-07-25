@@ -36,13 +36,16 @@ dict2 = {21: "S",
          7: "H",
          6: "H",
          5: "H",
-         4:"H"
+         4:"H",
+         3:"H",
+         2:"H"
          }
 
 def Action(card1, card2, dealersCard, open = True):
     Move = ""
     small = min(card1, card2)
     big = max(card1, card2)
+
 
     print("Small: ", small, "big: ", big, "Dealer: ", dealersCard)
 

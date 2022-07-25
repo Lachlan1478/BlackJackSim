@@ -10,16 +10,7 @@ def drawCard(dealer = False):
         card = 11
     return card
 
-class Actions():
-
-    def stand(self):
-        pass
-    def Blackjack(self):
-        pass
-
-
 class Game():
-
     def hit(self, sum):
         action = "H"
         while(action != "S"):
@@ -29,10 +20,6 @@ class Game():
             else:
                 action = Action(sum, 0, self.dealersCard[0], False)
         return sum
-
-    def split(self):
-
-        pass
 
     def double(self):
         lastCard = drawCard()
@@ -56,6 +43,35 @@ class Game():
                 self.result = 1
         return self.result
 
+    def actAction(self, move):
+        if (move == "H"):
+            self.sum = self.hit(self.hand[0] + self.hand[1])
+            self.getResult(self.sum, sum(self.dealersCard))
+        elif (move == "D"):
+            self.sum = self.double()
+            self.getResult(self.sum, sum(self.dealersCard))
+            self.result = self.result * 2
+        else:
+            self.sum = self.hand[0] + self.hand[1]
+            self.getResult(self.sum, sum(self.dealersCard))
+        return self.result
+
+    def split(self):
+        self.hand2.append(self.hand[0])
+        self.hand2.append(drawCard())
+        self.hand[1] = drawCard()
+
+        #hand 1
+        move1 = Action(self.hand[0], self.hand[1], self.dealersCard[0], False)
+        result1 = self.actAction(move1)
+
+        #hand 2
+        move2 = Action(self.hand2[0], self.hand2[1], self.dealersCard[0], False)
+        result2 = self.actAction(move2)
+
+        return result1+result2
+
+
     def __init__(self):
         ## Deal cards
         # Dealers Card
@@ -73,26 +89,16 @@ class Game():
         self.sum2 = 0
         self.result = 0
 
-
         #Get action
-
         self.move = Action(self.hand[0], self.hand[1], self.dealersCard[0])
 
         if(self.move == "SP"):
-            self.split()
+            self.result = self.split()
         else:
-            if(self.move == "H"):
-                self.sum = self.hit(self.hand[0]+self.hand[1])
-                self.getResult(self.sum, sum(self.dealersCard))
-            elif(self.move == "D"):
-                self.sum = self.double()
-                self.getResult(self.sum, sum(self.dealersCard))
-                self.result = self.result*2
-            else:
-                self.sum = self.hand[0]+self.hand[1]
-                self.getResult(self.sum, sum(self.dealersCard))
+            self.actAction(self.move)
 
     def returnResult(self):
         print("Hand: ", self.sum, "Dealer: ", sum(self.dealersCard))
         return self.result
+
 
